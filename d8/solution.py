@@ -31,27 +31,14 @@ for line in data.splitlines():
             count_1 += 1
 
     for c in itertools.permutations("abcdefg"):
-        mapping = {
-            "a": c[0],
-            "b": c[1],
-            "c": c[2],
-            "d": c[3],
-            "e": c[4],
-            "f": c[5],
-            "g": c[6]
-        }
-        try:
-            for digit in inputs:
-                numbers[frozenset(translate(digit, mapping))]
-            
-            # If this code is reached the mapping must be correct
-            number = ""
-            for digit in outputs:
-                number += numbers[frozenset(translate(digit, mapping))]
-            count_2 += int(number)
+        mapping = {f:t for f,t in zip("abcdefg", c)}
+
+        for digit in inputs:
+            if frozenset(translate(digit,mapping)) not in numbers:
+                break
+        else:
+            count_2 += int("".join([numbers[frozenset(translate(d, mapping))] for d in outputs]))
             break
-        except Exception:
-            continue
 
 print("Part 1:", count_1)
 print("Part 2:", count_2)
