@@ -7,15 +7,13 @@ width = len(grid[0])
 
 directions = [(1,0), (-1,0), (0,1), (0,-1)]
 
-def is_inside(x, y):
-    if x < height and y < width and x >= 0 and y >= 0:
-        return True
-    return False
+def is_out_of_bounds(x, y):
+    return x >= height or y >= width or x < 0 or y < 0
 
 def explore_basin(x, y, local_basin):
     if (
         (x, y) in local_basin or
-        not is_inside(x, y) or
+        is_out_of_bounds(x, y) or
         grid[x][y] == 9
     ):
         return local_basin
@@ -34,7 +32,7 @@ for x in range(height):
         for dx, dy in directions:
             x2 = x + dx
             y2 = y + dy
-            if not is_inside(x2, y2):
+            if is_out_of_bounds(x2, y2):
                 continue
             if grid[x2][y2] <= grid[x][y]:
                 break
