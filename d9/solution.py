@@ -5,40 +5,33 @@ grid = [[int(ch) for ch in line] for line in data.splitlines()]
 height = len(grid)
 width = len(grid[0])
 
-directions = (
-    (1,0),
-    (-1,0),
-    (0,1),
-    (0,-1)
-)
+directions = [(1,0), (-1,0), (0,1), (0,-1)]
 
 def is_inside(x, y):
     if x < height and y < width and x >= 0 and y >= 0:
         return True
     return False
 
-def explore_basin(x, y, trail):
-    if not is_inside(x,y):
-        return
+def explore_basin(x, y, local_basin):
+    if (
+        (x, y) in local_basin or
+        not is_inside(x, y) or
+        grid[x][y] == 9
+    ):
+        return local_basin
 
-    if grid[x][y] == 9:
-        return
-
-    if (x, y) in trail:
-        return
-
-    trail.add((x, y))
+    local_basin.add((x, y))
     for dx, dy in directions:
         x2, y2 = x + dx, y + dy
-        explore_basin(x2, y2, trail)
-    return
+        explore_basin(x2, y2, local_basin)
+    return local_basin
 
 
 count_1 = 0
 low_points = []
 for x in range(height):
     for y in range(width):
-        for dx,dy in directions:
+        for dx, dy in directions:
             x2 = x + dx
             y2 = y + dy
             if not is_inside(x2, y2):
@@ -51,14 +44,10 @@ for x in range(height):
 print("Part 1:", count_1)
 
 
-basins = []
+basin_sizes = []
 for x, y in low_points:
-    local_basin = set()
-    explore_basin(x, y, local_basin)
-    basins.append(local_basin)
+    local_basin = explore_basin(x, y, set())
+    basin_sizes.append(len(local_basin))
 
-basins.sort(key=lambda v: len(v), reverse=True)
-count_2 = 1
-for b in basins[:3]:
-    count_2 *= len(b)
-print("Part 2:", count_2)
+basin_sizes.sort(reverse=True)
+print("Part 2:", basin_sizes[0] * basin_sizes[1] * basin_sizes[2])
