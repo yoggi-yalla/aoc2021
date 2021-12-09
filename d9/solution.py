@@ -30,17 +30,15 @@ low_points = []
 for x in range(height):
     for y in range(width):
         for dx, dy in directions:
-            x2 = x + dx
-            y2 = y + dy
+            x2, y2 = x + dx, y + dy
             if is_out_of_bounds(x2, y2):
                 continue
             if grid[x2][y2] <= grid[x][y]:
                 break
         else:
-            low_points.append((x,y))
+            low_points.append((x, y))
             count_1 += grid[x][y] + 1
 print("Part 1:", count_1)
-
 
 basin_sizes = []
 for x, y in low_points:
