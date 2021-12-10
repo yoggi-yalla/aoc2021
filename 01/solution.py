@@ -8,11 +8,11 @@ count = 0
 for i in range(len(nums) - 1):
     if nums[i+1] > nums[i]:
         count += 1
-print("Part 1:", count)
+print("Part 1:", count) # 1722
 
 
 count = 0
 for i in range(len(nums) - 3):
     if nums[i + 3] > nums[i]:
         count += 1
-print("Part 2:", count)
+print("Part 2:", count) # 1748

@@ -17,7 +17,7 @@ for dir, v in instructions:
         v_pos -= v
     if dir == 'forward':
         h_pos += v
-print("Part 1:", h_pos * v_pos)
+print("Part 1:", h_pos * v_pos) # 1250395
 
 
 h_pos = 0
@@ -31,4 +31,4 @@ for dir, v in instructions:
     if dir == 'forward':
         h_pos += v
         v_pos += v * aim
-print("Part 2:", h_pos * v_pos)
+print("Part 2:", h_pos * v_pos) # 1451210346

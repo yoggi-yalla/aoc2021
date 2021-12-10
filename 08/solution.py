@@ -40,5 +40,5 @@ for line in data.splitlines():
             count_2 += int("".join([numbers[frozenset(translate(d, mapping))] for d in outputs]))
             break
 
-print("Part 1:", count_1)
-print("Part 2:", count_2)
+print("Part 1:", count_1) # 288
+print("Part 2:", count_2) # 940724

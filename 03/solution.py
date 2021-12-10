@@ -20,7 +20,7 @@ for pos, count in position_counts.items():
     else:
         epsilon_rate += 1 << pos
 
-print("Part 1:", epsilon_rate * gamma_rate)
+print("Part 1:", epsilon_rate * gamma_rate) # 2035764
 
 
 sub_nums = nums.copy()
@@ -46,4 +46,4 @@ for pos in reversed(range(digits)):
         sub_nums = [n for n in sub_nums if not n & 1 << pos]
 co_rating = sub_nums.pop()
 
-print("Part 2:", co_rating * og_rating)
+print("Part 2:", co_rating * og_rating) # 2817661

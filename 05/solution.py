@@ -35,5 +35,5 @@ def run(grid, lines):
             grid[x1 + x_dir * i][y1 + y_dir * i] += 1
     return count(grid)
 
-print("Part 1:", run(grid_1, straight_lines))
-print("Part 2:", run(grid_2, lines))
+print("Part 1:", run(grid_1, straight_lines)) # 5124
+print("Part 2:", run(grid_2, lines)) # 19771

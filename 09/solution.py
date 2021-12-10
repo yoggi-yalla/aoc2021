@@ -45,5 +45,5 @@ for x, y in low_points:
     local_basin = explore_basin(x, y, set())
     basin_sizes.append(len(local_basin))
 
-basin_sizes.sort(reverse=True)
-print("Part 2:", basin_sizes[0] * basin_sizes[1] * basin_sizes[2])
+basin_sizes.sort(reverse=True) # 633
+print("Part 2:", basin_sizes[0] * basin_sizes[1] * basin_sizes[2]) # 1050192

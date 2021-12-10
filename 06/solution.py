@@ -8,7 +8,7 @@ for x in data.split(','):
 
 for iteration in range(256):
     if iteration == 80:
-        print("Part 1:", sum(population.values()))
+        print("Part 1:", sum(population.values())) # 362666
 
     new = population[0]
     for i in range(8):
@@ -16,4 +16,4 @@ for iteration in range(256):
     population[8] = new
     population[6] += new
 
-print("Part 2:", sum(population.values()))
+print("Part 2:", sum(population.values())) # 1640526601595

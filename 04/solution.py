@@ -49,5 +49,5 @@ for num in nums:
         if board.check():
             board.is_complete = True
             results.append(board.count() * num)
-print("Part 1:", results[0])
-print("Part 2:", results[-1])
+print("Part 1:", results[0]) # 10680
+print("Part 2:", results[-1]) # 31892
