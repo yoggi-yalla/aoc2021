@@ -13,21 +13,21 @@ for line in data.splitlines():
 
 
 @cache
-def paths_to_end(current, visited, with_slack):
+def paths_to_end(current, visited, strict_mode):
     if current == 'end':
         return 1
     
     if current in visited and current.islower():
-        if not with_slack or current == 'start':
+        if current == 'start' or strict_mode:
             return 0
-        with_slack = False
+        strict_mode = True
 
     visited = frozenset([*visited, current])
     return sum(
-        paths_to_end(n, visited, with_slack)
+        paths_to_end(n, visited, strict_mode)
         for n in connections[current]
     )
 
 
-print("Part 1:", paths_to_end('start', frozenset(), False)) # 3887
-print("Part 2:", paths_to_end('start', frozenset(), True)) # 104834
+print("Part 1:", paths_to_end('start', frozenset(), True)) # 3887
+print("Part 2:", paths_to_end('start', frozenset(), False)) # 104834
