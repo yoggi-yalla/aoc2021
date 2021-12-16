@@ -55,5 +55,4 @@ for i in range(5):
                     new_num %= 9
                 new_line.append(new_num)
         grid_2.append(new_line)
-
 print("Part 2:", run(grid_2)) # 2897
