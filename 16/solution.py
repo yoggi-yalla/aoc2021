@@ -5,11 +5,7 @@ with open('input.txt') as f:
 
 
 nums = [int(x, base=16) for x in data]
-
-bits = ""
-for num in nums:
-    b_num = bin(num)
-    bits += "0"*(4-len(b_num[2:])) + b_num[2:]
+bits = "".join((bin(num).replace('0b', '').zfill(4) for num in nums))
 
 
 def parse_literal(bits):
