@@ -6,47 +6,21 @@ pattern = r"target area: x=(-?\d*)..(-?\d*), y=(-?\d*)..(-?\d*)"
 x_min, x_max, y_min, y_max = (int(x) for x in re.match(pattern, data).groups())
 
 
-def valid_velocity(dx, dy):
+def is_valid_velocity(dx, dy):
     x, y = (0, 0)
-    while True:
-        x, y = x + dx, y + dy
-        if x > x_max or y < y_min:
-            return False
+    while x <= x_max and y >= y_min:
         if x_min <= x <= x_max and y_min <= y <= y_max:
             return True
+        x, y = x + dx, y + dy
         dx, dy = max(dx - 1, 0), dy - 1
+    return False
 
 
-possible_dx = []
-for i in range(x_max + 1):
-    dx = i
-    x_pos = 0
-    while x_pos < x_max:
-        x_pos += dx
-        dx -= 1
-        if dx < 0:
-            break
-        if x_min <= x_pos <= x_max:
-            possible_dx.append(i)
-            break
+valid_velocities = []
+for dy in range(-y_min, y_min - 1, -1):
+    for dx in range(x_max + 1):
+        if is_valid_velocity(dx, dy):
+            valid_velocities.append((dx, dy))
 
-possible_dy = []
-for i in range(y_min, -y_min + 1):
-    dy = i
-    y_pos = 0
-    while y_pos > y_min:
-        y_pos += dy
-        dy -= 1
-        if y_min <= y_pos <= y_max:
-            possible_dy.append(i)
-            break
-
-valid_dx_dy = []
-for dy in possible_dy[::-1]:
-    for dx in possible_dx[::-1]:
-        if valid_velocity(dx, dy):
-            valid_dx_dy.append((dx, dy))
-
-
-print("Part 1:", sum(range(valid_dx_dy[0][1] + 1)))
-print("Part 2:", len(valid_dx_dy))
+print("Part 1:", sum(range(valid_velocities[0][1] + 1))) # 7626
+print("Part 2:", len(valid_velocities)) # 2032
