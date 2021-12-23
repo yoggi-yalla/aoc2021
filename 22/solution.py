@@ -17,109 +17,97 @@ def overlaps(box1, box2):
     x_min_1, x_max_1, y_min_1, y_max_1, z_min_1, z_max_1 = box1
     x_min_2, x_max_2, y_min_2, y_max_2, z_min_2, z_max_2 = box2
     return (
-        x_max_1 >= x_min_2 and
-        x_max_2 >= x_min_1 and
-        y_max_1 >= y_min_2 and
-        y_max_2 >= y_min_1 and
-        z_max_1 >= z_min_2 and
-        z_max_2 >= z_min_1
+        x_max_1 >= x_min_2
+        and x_max_2 >= x_min_1
+        and y_max_1 >= y_min_2
+        and y_max_2 >= y_min_1
+        and z_max_1 >= z_min_2
+        and z_max_2 >= z_min_1
     )
 
 def get_left_remainder(new_box, existing_box):
     if new_box[0] <= existing_box[0]:
         return set()
-    return set(
-        [
-            (
-                existing_box[0],
-                new_box[0] - 1,
-                existing_box[2],
-                existing_box[3],
-                existing_box[4],
-                existing_box[5],
-            )
-        ]
-    )
+    return {
+        (
+            existing_box[0],
+            new_box[0] - 1,
+            existing_box[2],
+            existing_box[3],
+            existing_box[4],
+            existing_box[5],
+        )
+    }
 
 def get_right_remainder(new_box, existing_box):
     if new_box[1] >= existing_box[1]:
         return set()
-    return set(
-        [
-            (
-                new_box[1] + 1,
-                existing_box[1],
-                existing_box[2],
-                existing_box[3],
-                existing_box[4],
-                existing_box[5],
-            )
-        ]
-    )
+    return {
+        (
+            new_box[1] + 1,
+            existing_box[1],
+            existing_box[2],
+            existing_box[3],
+            existing_box[4],
+            existing_box[5],
+        )
+    }
 
 def get_front_remainder(new_box, existing_box):
     if new_box[2] <= existing_box[2]:
         return set()
-    return set(
-        [
-            (
-                max(new_box[0], existing_box[0]),
-                min(new_box[1], existing_box[1]),
-                existing_box[2],
-                new_box[2] - 1,
-                existing_box[4],
-                existing_box[5],
-            )
-        ]
-    )
+    return {
+        (
+            max(new_box[0], existing_box[0]),
+            min(new_box[1], existing_box[1]),
+            existing_box[2],
+            new_box[2] - 1,
+            existing_box[4],
+            existing_box[5],
+        )
+    }
 
 def get_back_remainder(new_box, existing_box):
     if new_box[3] >= existing_box[3]:
         return set()
-    return set(
-        [
-            (
-                max(new_box[0], existing_box[0]),
-                min(new_box[1], existing_box[1]),
-                new_box[3] + 1,
-                existing_box[3],
-                existing_box[4],
-                existing_box[5],
-            )
-        ]
-    )
+    return {
+        (
+            max(new_box[0], existing_box[0]),
+            min(new_box[1], existing_box[1]),
+            new_box[3] + 1,
+            existing_box[3],
+            existing_box[4],
+            existing_box[5],
+        )
+    }
 
 def get_bottom_remainder(new_box, existing_box):
     if new_box[4] <= existing_box[4]:
         return set()
-    return set(
-        [
-            (
-                max(new_box[0], existing_box[0]),
-                min(new_box[1], existing_box[1]),
-                max(new_box[2], existing_box[2]),
-                min(new_box[3], existing_box[3]),
-                existing_box[4],
-                new_box[4] - 1,
-            )
-        ]
-    )
+    return {
+        (
+            max(new_box[0], existing_box[0]),
+            min(new_box[1], existing_box[1]),
+            max(new_box[2], existing_box[2]),
+            min(new_box[3], existing_box[3]),
+            existing_box[4],
+            new_box[4] - 1,
+        )
+    }
 
 def get_top_remainder(new_box, existing_box):
     if new_box[5] >= existing_box[5]:
         return set()
-    return set(
-        [
-            (
-                max(new_box[0], existing_box[0]),
-                min(new_box[1], existing_box[1]),
-                max(new_box[2], existing_box[2]),
-                min(new_box[3], existing_box[3]),
-                new_box[5] + 1,
-                existing_box[5],
-            )
-        ]
-    )
+    return {
+        (
+            max(new_box[0], existing_box[0]),
+            min(new_box[1], existing_box[1]),
+            max(new_box[2], existing_box[2]),
+            min(new_box[3], existing_box[3]),
+            new_box[5] + 1,
+            existing_box[5],
+        )
+    }
 
 def count(on_cubes):
     count = 0
@@ -128,14 +116,7 @@ def count(on_cubes):
     return count
 
 def inside_initialization_area(box):
-    return (
-        -50 <= box[0] <= 50 and
-        -50 <= box[1] <= 50 and
-        -50 <= box[2] <= 50 and
-        -50 <= box[3] <= 50 and
-        -50 <= box[4] <= 50 and
-        -50 <= box[5] <= 50
-    )
+    return all(-50 <= box[i] <= 50 for i in range(6))
 
 
 on_cubes = set()
@@ -147,7 +128,7 @@ for instruction in instructions:
 
     if initialization_running and not inside_initialization_area(new_box):
         initialization_running = False
-        print("Part 1:", count(on_cubes)) # 612714
+        print("Part 1:", count(on_cubes))  # 612714
 
     removals = set()
     additions = set()
@@ -158,17 +139,14 @@ for instruction in instructions:
     for box in on_cubes:
         if overlaps(new_box, box):
             removals.add(box)
-        else:
-            continue
-
-        additions.update(get_left_remainder(new_box, box))
-        additions.update(get_right_remainder(new_box, box))
-        additions.update(get_front_remainder(new_box, box))
-        additions.update(get_back_remainder(new_box, box))
-        additions.update(get_bottom_remainder(new_box, box))
-        additions.update(get_top_remainder(new_box, box))
+            additions.update(get_left_remainder(new_box, box))
+            additions.update(get_right_remainder(new_box, box))
+            additions.update(get_front_remainder(new_box, box))
+            additions.update(get_back_remainder(new_box, box))
+            additions.update(get_bottom_remainder(new_box, box))
+            additions.update(get_top_remainder(new_box, box))
 
     on_cubes.difference_update(removals)
     on_cubes.update(additions)
 
-print("Part 2:", count(on_cubes)) # 1311612259117092
+print("Part 2:", count(on_cubes))  # 1311612259117092
