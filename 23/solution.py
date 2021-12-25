@@ -170,5 +170,5 @@ def run(start_state, terminal_state, room_size):
     return cost, path
 
 
-print("Part 1:", run(start_state_1, terminal_state_1, 2)[0])
-print("Part 2:", run(start_state_2, terminal_state_2, 4)[0])
+print("Part 1:", run(start_state_1, terminal_state_1, 2)[0]) # 15160
+print("Part 2:", run(start_state_2, terminal_state_2, 4)[0]) # 46772
