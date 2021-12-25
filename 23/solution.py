@@ -1,8 +1,5 @@
-import heapq
-
 from collections import namedtuple
-
-room_size = 4
+import heapq
 
 State = namedtuple(
     'State', [
@@ -65,7 +62,7 @@ terminal_state_2 = State(
 )
 
 
-def get_next_states(state, cost, path, room_size):
+def get_next_states(state, cost, room_size):
     next_states = []
     for i in range(11):
         letter = state.hallway[i]
@@ -98,63 +95,52 @@ def get_next_states(state, cost, path, room_size):
                 *state[room_index+1:-1],
                 new_hallway
             )
-            sub_path = path + str(new_state) + "\n\n"
-            next_states.append((cost + new_cost, new_state, str(sub_path)))
+            next_states.append((cost + new_cost, new_state))
     
     for i in range(4):
         room = state[i]
         if len(room) == 0:
             continue
+        
         letter = room[-1]
         letter_cost = letter_to_cost[letter]
-
         new_room = room[:-1]
-        
         door_index = doors[i]
 
         for spot in hallway_spots:
             if spot < door_index:
                 if all(c == '.' for c in state.hallway[spot:door_index]):
                     new_cost = (room_size + 1 - len(room)) * letter_cost + (door_index - spot) * letter_cost
-                    new_hallway = tuple([
-                        *state.hallway[:spot],
-                        letter,
-                        *state.hallway[spot+1:]
-                    ])
-                    new_state = State(
-                        *state[:i],
-                        new_room,
-                        *state[i+1:-1],
-                        new_hallway
-                    )
-                    sub_path = path + str(new_state) + "\n\n"
-                    next_states.append((cost + new_cost, new_state, str(sub_path)))
+                else:
+                    continue
 
             if spot > door_index:
                 if all(c == '.' for c in state.hallway[door_index:spot+1]):
                     new_cost = (room_size + 1 - len(room)) * letter_cost + (spot - door_index) * letter_cost
-                    new_hallway = tuple([
-                        *state.hallway[:spot],
-                        letter,
-                        *state.hallway[spot+1:]
-                    ])
-                    new_state = State(
-                        *state[:i],
-                        new_room,
-                        *state[i+1:-1],
-                        new_hallway
-                    )
-                    sub_path = path + str(new_state) + "\n\n"
-                    next_states.append((cost + new_cost, new_state, str(sub_path)))
+                else:
+                    continue
+
+            new_hallway = tuple([
+                *state.hallway[:spot],
+                letter,
+                *state.hallway[spot+1:]
+            ])
+            new_state = State(
+                *state[:i],
+                new_room,
+                *state[i+1:-1],
+                new_hallway
+            )
+            next_states.append((cost + new_cost, new_state))
 
     return next_states
 
 
 def run(start_state, terminal_state, room_size):
     visited = set()
-    horizon = [(0, start_state, "")]
+    horizon = [(0, start_state)]
     while horizon:
-        cost, state, path = heapq.heappop(horizon)
+        cost, state = heapq.heappop(horizon)
         if state == terminal_state:
             break
 
@@ -163,12 +149,12 @@ def run(start_state, terminal_state, room_size):
 
         visited.add(state)
 
-        next_states = get_next_states(state, cost, path, room_size)
+        next_states = get_next_states(state, cost, room_size)
         for state in next_states:
             heapq.heappush(horizon, state)
     
-    return cost, path
+    return cost
 
 
-print("Part 1:", run(start_state_1, terminal_state_1, 2)[0]) # 15160
-print("Part 2:", run(start_state_2, terminal_state_2, 4)[0]) # 46772
+print("Part 1:", run(start_state_1, terminal_state_1, 2)) # 15160
+print("Part 2:", run(start_state_2, terminal_state_2, 4)) # 46772
