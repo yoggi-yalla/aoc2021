@@ -38,12 +38,12 @@ for x in range(height):
         else:
             low_points.append((x, y))
             count_1 += grid[x][y] + 1
-print("Part 1:", count_1)
+print("Part 1:", count_1) # 633
 
 basin_sizes = []
 for x, y in low_points:
     local_basin = explore_basin(x, y, set())
     basin_sizes.append(len(local_basin))
 
-basin_sizes.sort(reverse=True) # 633
+basin_sizes.sort(reverse=True)
 print("Part 2:", basin_sizes[0] * basin_sizes[1] * basin_sizes[2]) # 1050192
